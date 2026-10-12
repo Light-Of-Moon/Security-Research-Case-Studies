@@ -31,7 +31,7 @@ I'll test comparable features, identify vulnerabilities, and trace them back to 
 
 ---
 
-## Researcher
+## Members 
 
 **Mohamed Salah — Security Researcher | Penetration Tester**
 
