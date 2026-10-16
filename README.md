@@ -40,6 +40,7 @@ I'll test comparable features, identify vulnerabilities, and trace them back to 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/mohamed-salah-3a0498248/)
 
 **Ahmed Hatem — Web Pentester**
+
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ahmed-hatem-0530742b2)
 
 
