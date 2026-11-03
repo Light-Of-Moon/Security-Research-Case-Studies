@@ -1,0 +1,68 @@
+<group name="security_control_limits,">
+  <rule id="110100" level="1">
+    <decoded_as>json</decoded_as>
+    <field name="component" type="pcre2">^dlp-gateway$</field>
+    <description>SCL DLP gateway event</description>
+    <group>dlp,</group>
+  </rule>
+  <rule id="110101" level="10">
+    <if_sid>110100</if_sid>
+    <field name="verdict" type="pcre2">^block$</field>
+    <description>SCL DLP blocked classified data or destination</description>
+    <group>dlp,policy_violation,</group>
+  </rule>
+  <rule id="110110" level="2">
+    <decoded_as>json</decoded_as>
+    <field name="component" type="pcre2">^suricata$</field>
+    <description>SCL inline IPS event</description>
+    <group>ids,</group>
+  </rule>
+  <rule id="110111" level="9">
+    <if_sid>110110</if_sid>
+    <field name="alert.action" type="pcre2">^(blocked|drop)$</field>
+    <description>SCL inline IPS blocked traffic</description>
+    <group>ips,network_attack,</group>
+  </rule>
+  <rule id="110120" level="10">
+    <decoded_as>json</decoded_as>
+    <field name="component" type="pcre2">^external-receiver$</field>
+    <description>SCL isolated receiver recorded data movement</description>
+    <group>data_movement,</group>
+  </rule>
+  <rule id="110130" level="6">
+    <decoded_as>json</decoded_as>
+    <field name="component" type="pcre2">^internal-assets$</field>
+    <match type="pcre2">"status"\s*:\s*(401|403)</match>
+    <description>SCL protected internal service denied access</description>
+    <group>access_denied,</group>
+  </rule>
+  <rule id="110150" level="3">
+    <!-- Wazuh's built-in Suricata parent (86600) broadly matches any JSON
+         event containing timestamp + event_type. Runtime events have both,
+         so chain from that parent and then narrow on our component field. -->
+    <if_sid>86600</if_sid>
+    <field name="component" type="pcre2">^runtime-monitor$</field>
+    <description>SCL workload runtime event</description>
+    <group>runtime_monitoring,</group>
+  </rule>
+  <rule id="110151" level="12">
+    <if_sid>110150</if_sid>
+    <field name="event_type" type="pcre2">^unexpected_child_process$</field>
+    <description>SCL Java service spawned an unexpected utility process</description>
+    <group>runtime_monitoring,process_anomaly,retrospective_hypothesis,</group>
+  </rule>
+  <rule id="110160" level="3">
+    <!-- Authorization events also carry timestamp + event_type and therefore
+         enter Wazuh through the broad built-in JSON/Suricata parent. -->
+    <if_sid>86600</if_sid>
+    <field name="component" type="pcre2">^authorization$</field>
+    <description>SCL trusted authorization decision</description>
+    <group>authorization,</group>
+  </rule>
+  <rule id="110161" level="6">
+    <if_sid>110160</if_sid>
+    <field name="decision" type="pcre2">^deny$</field>
+    <description>SCL trusted policy denied protected-route access without a valid session</description>
+    <group>authorization,access_denied,</group>
+  </rule>
+</group>

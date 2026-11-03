@@ -1,0 +1,10 @@
+.env
+*.jar
+__pycache__/
+*.pyc
+evidence-runs/*
+!evidence-runs/.gitkeep
+infrastructure/logs/*.jsonl
+infrastructure/logs/*.log
+cases/*/mode-*/evidence/
+backups/

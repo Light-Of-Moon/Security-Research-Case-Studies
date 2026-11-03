@@ -1,46 +1,26 @@
- 
-# Security Research — Case Studies
+# security research case studies
 
-**CVE Exploitation & Defense Testing | AI-Generated Code Security | Android & Web Application Security**
+three docker labs and a review of app-builder security. we examined which controls saw an attack, which stopped it, and which only limited the damage.
 
-![CVE Research](https://img.shields.io/badge/01-CVE_Research-0D9488?style=for-the-badge&labelColor=111827)
-![AI Code Security](https://img.shields.io/badge/02-AI_Code_Security-2563EB?style=for-the-badge&labelColor=111827)
-![Android and Web](https://img.shields.io/badge/03-Android_%26_Web-7C3AED?style=for-the-badge&labelColor=111827)
+## cves against security controls
 
----
+| case | recorded result | added control |
+| --- | --- | --- |
+| [next.js / cve-2025-29927](labs/security-control-limits/cases/CVE-2025-29927/) | protected page returned without a session | independent session check redirected the bypass |
+| [teamcity / cve-2024-27198](labs/security-control-limits/cases/CVE-2024-27198/) | unauthenticated administrator creation | method guard blocked the write; read bypass remained |
+| [activemq / cve-2023-46604](labs/security-control-limits/cases/CVE-2023-46604/) | code execution and document transfer | segmentation limited data access; runtime monitoring raised an alert |
 
-I'm working on three security research projects. I'll build the environments, reproduce vulnerabilities, review the code and configurations, and document the results of each test, including what worked, what failed, and why.
+the key finding: **an alert does not prove prevention, and one blocked payload does not prove full coverage.** the reports explain the rule, decision and observed result for each case.
 
-## 01 / CVEs Against Security Controls
+[lab setup](labs/security-control-limits/) · [seven reports](reports/)
 
-I'll reproduce real CVEs in isolated environments and test their impact against WAF, EDR, IDS/IPS, SIEM, and network security controls.
+## app builders and generated code
 
-I'll compare production-like and hardened configurations, investigate exploit chaining, and check what the defenses actually prevent, detect, or miss.
+[published research](research/app-builders/) on ai-built apps, wordpress components and android generators. the cases cover ownership checks, payment state, platform authentication and database settings.
 
-## 02 / Security of AI-Generated Code
+the report draws its evidence from published disclosures and research papers.
 
-I'll build applications using AI coding tools and examine their security, including authentication, authorization, business logic, dependencies, and insecure configurations.
+## members
 
-I'll investigate why vulnerabilities appear, how AI handles security fixes, and whether updating dependencies or applying generated patches actually resolves the issues.
-
-## 03 / Android & Web: How Apps Are Built
-
-I'll compare Android and web applications built using traditional app builders, vibe coding, and manual development.
-
-I'll test comparable features, identify vulnerabilities, and trace them back to the code, framework, configuration, or development approach responsible.
-
----
-
-## Members 
-
-**Mohamed Salah — Security Researcher | Penetration Tester**
-
-[![HackerOne](https://img.shields.io/badge/HackerOne-494649?style=flat-square&logo=hackerone&logoColor=white)](https://hackerone.com/lightofthemoon)
-[![HackTheBox](https://img.shields.io/badge/HackTheBox-111927?style=flat-square&logo=hackthebox&logoColor=9FEF00)](https://app.hackthebox.com/profile/2354735)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/mohamed-salah-3a0498248/)
-
-**Ahmed Hatem — Web Pentester**
-
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ahmed-hatem-0530742b2)
-
-
+- **[mohamed salah](https://www.linkedin.com/in/mohamed-salah-3a0498248/)** — security researcher / penetration tester · [hackerone](https://hackerone.com/lightofthemoon) · [hack the box](https://app.hackthebox.com/profile/2354735)
+- **[ahmed hatem](https://www.linkedin.com/in/ahmed-hatem-0530742b2)** — web pentester

@@ -1,0 +1,250 @@
+name: scl-shared
+
+services:
+  telemetry-agent:
+    image: wazuh/wazuh-agent:4.14.8
+    profiles: ["siem"]
+    restart: unless-stopped
+    environment:
+      WAZUH_MANAGER_SERVER: wazuh.manager
+    volumes:
+      - ./siem/wazuh-agent.conf:/wazuh-config-mount/etc/ossec.conf:ro
+      - ../evidence-runs/current/shared:/scl-logs:ro
+      - telemetry_agent_etc:/var/ossec/etc
+    networks:
+      - management
+      - existing_wazuh
+    security_opt:
+      - no-new-privileges:true
+
+  waf:
+    image: owasp/modsecurity-crs:4.12.0-nginx-202503230103
+    profiles: ["web"]
+    restart: unless-stopped
+    environment:
+      BACKEND: http://response-dlp:8080
+      SERVER_NAME: localhost
+      PORT: "8080"
+      NGINX_ALWAYS_TLS_REDIRECT: "off"
+      MODSEC_RULE_ENGINE: "On"
+      MODSEC_AUDIT_ENGINE: "On"
+      MODSEC_AUDIT_LOG_FORMAT: JSON
+      MODSEC_AUDIT_LOG: /evidence/waf-audit.log
+      ACCESSLOG: /evidence/waf-access.log
+      ERRORLOG: /evidence/waf-error.log
+      BLOCKING_PARANOIA: ${CRS_PARANOIA:-2}
+      ANOMALY_INBOUND: ${CRS_INBOUND_THRESHOLD:-5}
+      ANOMALY_OUTBOUND: ${CRS_OUTBOUND_THRESHOLD:-4}
+    volumes:
+      - ../evidence-runs/current/shared:/evidence
+    networks:
+      - simulated_internet
+      - ingress
+    depends_on:
+      - response-dlp
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8080/"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  host-publisher:
+    image: python:3.12-alpine
+    profiles: ["web"]
+    restart: unless-stopped
+    command: ["python", "-u", "/app/tcp_proxy.py"]
+    environment:
+      LISTEN_PORT: "8080"
+      UPSTREAM_HOST: waf
+      UPSTREAM_PORT: "8080"
+    ports:
+      - "127.0.0.1:${LAB_HTTP_PORT:-18080}:8080"
+    volumes:
+      - ./host-publisher/tcp_proxy.py:/app/tcp_proxy.py:ro
+    networks: ["simulated_internet"]
+    read_only: true
+    tmpfs: ["/tmp"]
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+    depends_on:
+      waf:
+        condition: service_healthy
+
+  response-dlp:
+    build: ./dlp
+    profiles: ["web"]
+    restart: unless-stopped
+    environment:
+      GATEWAY_ROLE: response
+      DLP_MODE: ${DLP_MODE:-block}
+      LAB_SECURITY_MODE: ${LAB_MODE:-mode-a}
+      LAB_EXPERIMENT_ID: ${EXPERIMENT_ID:-manual-unset}
+      DLP_LOG: /evidence/response-dlp.jsonl
+      UPSTREAM: ${CASE_BACKEND:-case-target:8080}
+    volumes:
+      - ../evidence-runs/current/shared:/evidence
+    networks:
+      - ingress
+      - application
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+
+  ips:
+    build: ./ips
+    profiles: ["web"]
+    restart: unless-stopped
+    network_mode: service:waf
+    environment:
+      IPS_TARGET_HOST: response-dlp
+      IPS_TARGET_PORT: "8080"
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    volumes:
+      - ../evidence-runs/current/shared:/var/log/suricata
+      - ./ips/lab.rules:/etc/suricata/rules/lab.rules:ro
+    depends_on:
+      - waf
+
+  waf-normalizer:
+    image: python:3.12-alpine
+    profiles: ["web"]
+    restart: unless-stopped
+    network_mode: none
+    command: ["python", "-u", "/app/normalize_waf.py"]
+    environment:
+      LAB_EXPERIMENT_ID: ${EXPERIMENT_ID:-manual-unset}
+    volumes:
+      - ../evidence-runs/current/shared:/logs
+      - ./siem/normalize_waf.py:/app/normalize_waf.py:ro
+    depends_on:
+      - waf
+
+  ips-normalizer:
+    image: python:3.12-alpine
+    profiles: ["web"]
+    restart: unless-stopped
+    network_mode: none
+    command: ["python", "-u", "/app/normalize_ips.py"]
+    environment:
+      LAB_EXPERIMENT_ID: ${EXPERIMENT_ID:-manual-unset}
+    volumes:
+      - ../evidence-runs/current/shared:/logs
+      - ./siem/normalize_ips.py:/app/normalize_ips.py:ro
+    depends_on:
+      - ips
+
+  internal-assets:
+    build: ./internal-assets
+    restart: unless-stopped
+    environment:
+      LAB_ASSET_TOKEN: SCL-INTERNAL-TOKEN-4M7Q9X2K
+      LAB_EXPERIMENT_ID: ${EXPERIMENT_ID:-manual-unset}
+      LAB_LOG: /evidence/internal-assets.jsonl
+    volumes:
+      - ../evidence-runs/current/shared:/evidence
+    networks:
+      - protected_internal
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/health"]
+      interval: 5s
+      timeout: 2s
+      retries: 12
+
+  external-receiver:
+    build: ./external-receiver
+    restart: unless-stopped
+    environment:
+      LAB_LOG: /evidence/receiver.jsonl
+      LAB_STORE: /evidence/received
+    volumes:
+      - ../evidence-runs/current/shared:/evidence
+    networks:
+      - egress
+      - simulated_internet
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+
+  egress-gateway:
+    build: ./dlp
+    restart: unless-stopped
+    environment:
+      GATEWAY_ROLE: egress
+      DLP_MODE: ${DLP_MODE:-block}
+      LAB_SECURITY_MODE: ${LAB_MODE:-mode-a}
+      LAB_EXPERIMENT_ID: ${EXPERIMENT_ID:-manual-unset}
+      DLP_LOG: /evidence/egress-dlp.jsonl
+      EGRESS_DESTINATIONS: external-receiver:8080
+    volumes:
+      - ../evidence-runs/current/shared:/evidence
+    networks:
+      - application
+      - protected_internal
+      - egress
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+
+  egress-tester:
+    image: python:3.12-alpine
+    command: ["sh", "-c", "sleep infinity"]
+    networks:
+      - application
+    read_only: true
+    tmpfs:
+      - /tmp
+    volumes:
+      - ./egress-gateway/test_client.py:/opt/scl/test_client.py:ro
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+
+
+networks:
+  simulated_internet:
+    name: scl_simulated_internet
+    internal: true
+  ingress:
+    name: scl_ingress
+    internal: true
+  application:
+    name: scl_application
+    internal: true
+  protected_internal:
+    name: scl_protected_internal
+    internal: true
+  egress:
+    name: scl_egress
+    internal: true
+  management:
+    name: scl_management
+    internal: true
+  existing_wazuh:
+    name: single-node_default
+    external: true
+
+volumes:
+  telemetry_agent_etc:
+    name: scl_telemetry_agent_etc

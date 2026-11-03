@@ -1,0 +1,5 @@
+# Independent positive control. It is not evidence of CVE detection.
+drop http any any -> any any (msg:"SCL IPS positive-control header"; flow:established,to_server; http.header; content:"X-SCL-IPS-Test|3a 20|dropme"; nocase; sid:1001001; rev:1;)
+# Generic traversal policy that is not tailored to any selected CVE.
+drop http any any -> any any (msg:"SCL generic raw URI traversal"; flow:established,to_server; http.uri.raw; content:"../"; sid:1001002; rev:1;)
+
