@@ -24,3 +24,5 @@ the report draws its evidence from published disclosures and research papers.
 
 - **[mohamed salah](https://www.linkedin.com/in/mohamed-salah-3a0498248/)** — security researcher / penetration tester · [hackerone](https://hackerone.com/lightofthemoon) · [hack the box](https://app.hackthebox.com/profile/2354735)
 - **[ahmed hatem](https://www.linkedin.com/in/ahmed-hatem-0530742b2)** — web pentester
+- **[Adnan Samy](https://www.linkedin.com/in/adnan-samy/)** — Web pentester
+
