@@ -1,6 +1,6 @@
 # Reports
 
-[← Project overview](../README.md) · [Lab setup](../labs/security-control-limits/) · [App-builder sources](../research/app-builders/)
+[← Project overview](../README.md) · [Evidence library](../evidence/README.md) · [Published sources](../references/README.md) · [Lab setup](../labs/security-control-limits/) · [App-builder sources](../research/app-builders/)
 
 The manual captures and control experiments are separate evidence sets. Compare outcomes within the configuration described by each report.
 
