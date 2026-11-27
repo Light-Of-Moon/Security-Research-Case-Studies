@@ -1,4 +1,7 @@
-# Reports
+# Report library
+
+Seven PDF reports. Covers were visually refreshed in this edition; internal findings and evidence pages were preserved.
+
 
 [← Project overview](../README.md) · [Evidence library](../evidence/README.md) · [Published sources](../references/README.md) · [Lab setup](../labs/security-control-limits/) · [App-builder sources](../research/app-builders/)
 

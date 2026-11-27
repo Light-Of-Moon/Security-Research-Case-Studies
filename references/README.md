@@ -33,3 +33,6 @@ Vendor advisories and original researcher publications related to the project. D
 | 2025-07-29 | Wiz | Original research | [Base44 private-application access bypass](https://www.wiz.io/blog/critical-vulnerability-base44) |
 
 The [app-builder source index](../research/app-builders/README.md) contains the broader set of disclosures and studies used in that report.
+
+
+| App builders / Lovable | [Lovable: Many Apps Built on the Platform Expose Sensitive Data](https://www.crissyfield.de/research/lovable-en/) | Crissy Field GmbH | 2026 |
