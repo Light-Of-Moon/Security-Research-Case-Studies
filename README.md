@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/research-overview.png" alt="DEPI security research overview" width="100%">
+  <img src="assets/research-overview1.png" alt="DEPI security research overview" width="100%">
 </p>
 
 <h1 align="center">Security Research Case Studies</h1>
