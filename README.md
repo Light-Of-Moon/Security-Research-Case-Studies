@@ -161,5 +161,3 @@ Manual captures and control experiments are separate evidence sets. Published di
 | :--- | :--- | :--- |
 | **Mohamed Salah** | Security researcher / penetration tester | [LinkedIn](https://www.linkedin.com/in/mohamed-salah-3a0498248/) · [HackerOne](https://hackerone.com/lightofthemoon) · [Hack The Box](https://app.hackthebox.com/profile/2354735) |
 | **Ahmed Hatem** | Web pentester | [LinkedIn](https://www.linkedin.com/in/ahmed-hatem-0530742b2) |
-
-[Product logo sources](assets/logos/README.md)
