@@ -14,8 +14,6 @@
   <a href="references/README.md">Sources</a>
 </p>
 
-Two research objectives: **test security control limits** in isolated labs and **compare documented vulnerability patterns** across development approaches.
-
 ---
 
 ## Objective 1 — Security control limits
@@ -51,9 +49,6 @@ Two research objectives: **test security control limits** in isolated labs and *
 | Independent authorization / method guard | Session state in Next.js; missing credential indicators on TeamCity writes | Next.js denied the tested unauthenticated access; TeamCity blocked unauthenticated writes while reads remained exposed. |
 | Docker segmentation | Network memberships and downstream access outcomes | Removed ActiveMQ's access to the protected network; did not prevent RCE. |
 | Runtime monitor | Unexpected Java child processes | Detected behavior after execution; did not stop the shell. |
-
-> [!IMPORTANT]
-> An alert does not prove prevention. A blocked probe does not prove full coverage. A receiver event does not by itself prove data theft. The results apply to the recorded configurations, not every deployment of these tools.
 
 ### Research workflow
 
@@ -113,18 +108,6 @@ Examples combine disclosures, controlled studies and recognized risks. They do n
 | [Android generators — IEEE S&P (2018)](https://doi.org/10.1109/SP.2018.00005) | Shared generated components and insecure configuration; historical findings. |
 | [AI assistance — ACM CCS (2023)](https://doi.org/10.1145/3576915.3623157) | Controlled study: 36% vs. 7% SQL-injectable solutions in one task (AI-assisted vs. non-AI). Small sample, older model. |
 
-Lovable's 7,403/24,664 observation is **not a confirmed data leak rate**; the sample was not representative of all Lovable apps. See the [full research case](cases/app-builders.md) for scope, limitations and sources.
-
-### Security boundaries to verify before release
-
-| Boundary | Required behavior |
-| :--- | :--- |
-| Identity and membership | Registration, login and recovery must enforce the same private-access policy. |
-| Ownership and permissions | Verify the caller's rights for every read, insert, update and delete. |
-| Business logic | Only trusted processing may change sensitive payment or order states. |
-| Shared components | Review plugin handlers, native bridges, exported components and generated templates. |
-| Deployment configuration | Deny public access by default; validate backend policies and keep secrets out of public data. |
-
 [Read the detailed comparison](cases/app-builders.md) · [Published evidence](evidence/app-builders/README.md)
 
 ---
@@ -152,8 +135,6 @@ Lovable's 7,403/24,664 observation is **not a confirmed data leak rate**; the sa
 | [Historical log archive](logs/three_cve_logs_available_records.txt) | Available original project log records. |
 | [Lab source](labs/security-control-limits/README.md) | Docker Compose, control policies, test helpers and evidence collection. |
 | [References](references/README.md) | Dated advisories and original publications. |
-
-Manual captures and control experiments are separate evidence sets. Published disclosures are third-party research, not lab reproductions. Correlate matching experiment IDs and distinguish application outcomes from sensor decisions.
 
 ## Members
 
