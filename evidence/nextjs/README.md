@@ -1,6 +1,6 @@
 # Next.js — evidence index
 
-[← Project overview](../../README.md) · [All evidence](../README.md) · [Published sources](../../references/README.md)
+[← Case study](../../cases/nextjs.md) · [Project overview](../../README.md) · [All evidence](../README.md) · [Published sources](../../references/README.md)
 
 The forged middleware header returned the protected page without a session. An independent gateway redirected requests without a valid session.
 

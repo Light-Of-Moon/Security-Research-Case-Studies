@@ -15,4 +15,4 @@
 
 Five exact JSON records are extracted from the original archive. The [manifest](manifest.json) records their original line numbers, experiment IDs and SHA-256 hashes. It also maps all screenshot IDs to their report pages.
 
-[Full archive](../logs/three_cve_logs_available_records.txt) · [HTML evidence browser](index.html)
+[Full archive](../logs/three_cve_logs_available_records.txt) · [Case studies](../cases/README.md)

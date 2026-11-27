@@ -1,6 +1,6 @@
 # App builders — evidence index
 
-[← Project overview](../../README.md) · [All evidence](../README.md) · [Published sources](../../references/README.md)
+[← Case study](../../cases/app-builders.md) · [Project overview](../../README.md) · [All evidence](../README.md) · [Published sources](../../references/README.md)
 
 Published disclosures and studies on ownership, payment state, platform authentication and shared generated code.
 

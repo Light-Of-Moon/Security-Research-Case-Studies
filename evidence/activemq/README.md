@@ -1,6 +1,6 @@
 # ActiveMQ — evidence index
 
-[← Project overview](../../README.md) · [All evidence](../README.md) · [Published sources](../../references/README.md)
+[← Case study](../../cases/activemq.md) · [Project overview](../../README.md) · [All evidence](../README.md) · [Published sources](../../references/README.md)
 
 Command execution still succeeded after the extra controls. Segmentation restricted protected document access, while runtime monitoring reported the child process.
 

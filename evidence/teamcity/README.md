@@ -1,6 +1,6 @@
 # TeamCity — evidence index
 
-[← Project overview](../../README.md) · [All evidence](../README.md) · [Published sources](../../references/README.md)
+[← Case study](../../cases/teamcity.md) · [Project overview](../../README.md) · [All evidence](../README.md) · [Published sources](../../references/README.md)
 
 The altered route reached protected REST operations. The added method guard blocked the external administrator-creation request; bypassed reads remained available.
 
