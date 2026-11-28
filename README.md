@@ -52,20 +52,8 @@
 
 ### Research workflow
 
-```mermaid
-flowchart LR
-    A[Isolated test client] --> B[Ingress controls]
-    B --> C[Vulnerable application]
-    C --> D[Protected network]
-    C --> E[Egress DLP]
-    E --> F[Synthetic receiver]
-    B -. telemetry .-> G[Wazuh SIEM]
-    C -. runtime telemetry .-> G
-    E -. policy events .-> G
-    F -. receipt events .-> G
-```
+  <img src="assets/research-workflow.png"  width="100%">
 
-Conceptual topology: web cases use HTTP controls; ActiveMQ uses HAProxy on the binary OpenWire path. Actual connectivity and policies differ by configuration.
 
 [Lab source and setup](labs/security-control-limits/README.md) · [Six experimental reports](reports/README.md) · [Recorded evidence](evidence/README.md)
 
